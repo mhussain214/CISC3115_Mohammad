@@ -1,0 +1,172 @@
+13.1 
+Choice f is the correct option
+
+
+13.3
+a. An abstract class can be used just like a nonabstract class except that you cannot use the new operator to create an instance from the abstract class.
+True.
+
+b. An abstract class can be extended.
+True. 
+
+c. A subclass of a nonabstract superclass cannot be abstract.
+False.
+
+d. A subclass cannot override a concrete method in a superclass to define it as abstract.
+True.
+
+e. An abstract method must be nonstatic.
+True. 
+
+13.4 
+The code compiles because the reference types are compatible (both Number), but it causes a runtime error (ClassCastException) 
+because you are attempting an illegal cast from Integer to Double. 
+
+13.5
+Even though the array is declared as Number[], the actual runtime type of the array is Integer[], and you cannot store a Double in an array of Integer. 
+
+13.6
+OUTPUT -
+3
+3.0
+
+13.7
+The issue here is that the Number class does not have a compareTo method. 
+To fix this issue, you can cast x to Integer before calling the compareTo method:
+System.out.println(((Integer) x).compareTo(new Integer(4)));
+
+13.8
+The issue here is that the result of x.compareTo(new Integer(4)) is of type int, not Integer. Therefore, the cast to Integer is unnecessary and incorrect.
+To fix this issue, you can directly print the result without the cast:
+System.out.println(x.compareTo(new Integer(4)));
+
+13.13: Can you create an instance using new A()?
+No, you cannot create an instance of an interface using the new keyword. Interfaces in Java cannot be instantiated on their own. 
+They are meant to be implemented by classes, and instances of those classes can be created.
+
+13.14: Can you declare a reference variable x with type A like this?
+Yes, you can declare a reference variable of type A:     A x;
+
+
+13.15
+The method print(); is missing a return type, and interfaces cannot have a body for methods. The correct syntax for an interface method is:
+abstract interface A {
+    void print();
+
+
+13.16
+The method m1() in the interface A should not have a body.
+The method m1() in the class B should use the @Override annotation when implementing an interface method.
+The System.out.println("ml"); statement is outside any method or block and should be placed inside a method.
+interface A {
+    void m1();
+}
+
+class B implements A {
+    @Override
+    public void m1() {
+        System.out.println("ml");
+    }
+}
+
+
+13.17
+True. If a class implements the Comparable interface, it means that instances of that class can be compared with each other using the compareTo method. 
+
+
+13.18
+The correct method header for the compareTo method in the String class is:
+public int compareTo(String o)
+
+13.19
+The code will not compile. The compareTo method is not defined in the Object class. 
+Even though n1 is of type Integer and n2 is of type Object, the compiler checks the types at compile time. 
+
+13.20
+You can define the compareTo method in a class without implementing the Comparable interface. 
+
+
+13.21
+The Person class needs to implement the Comparable interface and provide an implementation for the compareTo method for proper sorting. 
+Here's the corrected code:
+
+import java.util.Arrays;
+
+public class Test {
+    public static void main(String[] args) {
+        Person[] persons = {new Person(3), new Person(4), new Person(1)};
+        Arrays.sort(persons);
+    }
+}
+
+class Person implements Comparable<Person> {
+    private int id;
+
+    Person(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public int compareTo(Person other) {
+        return Integer.compare(this.id, other.id);
+    }
+}
+
+13.22
+You cannot invoke the clone() method to clone an object if the class for the object does not implement the java.lang.Cloneable interface. 
+This is because the clone() method is protected in java.lang.Object 
+
+13.23
+If the House class did not override the clone() method or if House did not implement java.lang.Cloneable, 
+attempting to invoke the clone() method on a House object would result in a CloneNotSupportedException at runtime
+
+
+13.24
+OUTPUT
+TRUE
+FALSE
+TRUE
+
+13.25
+output
+true
+false
+list is [New York, Atlanta]
+list1 is [New York, Atlanta]
+list2.get(0) is New York
+list2.size() is 1
+
+
+
+13.26
+You need to cast the result to GeometricObject. Additionally, you need to ensure that the GeometricObject class implements Cloneable. 
+ corrected code:
+
+public class Test {
+    public static void main(String[] args) {
+        GeometricObject x = new Circle(3);
+        GeometricObject y = (GeometricObject) x.clone();
+        System.out.println(x == y);
+    }
+}
+
+
+13.29
+a. An interface is compiled into a separate bytecode file.
+
+True. In Java, each interface is compiled into its own bytecode file with a .class extension.
+b. An interface can have static methods.
+
+True. Starting from Java 8, interfaces can have static methods. These methods are defined using the static keyword and can be invoked using the interface name.
+c. An interface can extend one or more interfaces.
+
+True. An interface in Java can extend one or more interfaces using the extends keyword.
+d. An interface can extend an abstract class.
+
+False. In Java, an interface cannot extend a class, whether it's abstract or not. An interface can only extend other interfaces.
+e. An abstract class can extend an interface.
+
+False. An abstract class in Java can implement an interface, but it cannot extend an interface. Abstract classes can extend other classes (abstract or concrete) or be standalone.
+
+
+
