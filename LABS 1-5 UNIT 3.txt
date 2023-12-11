@@ -1,0 +1,386 @@
+- SHORTEST PATH LAB 1
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class ShortestPath {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            Point2D p1 = new Point2D("A", scanner);
+            Point2D p2 = new Point2D("B", scanner);
+            Point2D p3 = new Point2D("C", scanner);
+
+            Path3 path = new Path3("Path", p1, p2, p3);
+
+            System.out.println("Path: " + path);
+            System.out.println("Path Length: " + path.length());
+        } catch (InputMismatchException e) {
+            System.err.println("Error: Invalid input format. Please provide correct input.");
+        } finally {
+            scanner.close();
+        }
+    }
+}
+
+
+
+
+
+
+
+import java.util.Scanner;
+
+class Point2D {
+    private double x;
+    private double y;
+    private String label;
+
+    // Constructors
+    public Point2D() {
+        this.x = 0.0;
+        this.y = 0.0;
+        this.label = "";
+    }
+
+    public Point2D(String label, double x, double y) {
+        this.label = label;
+        this.x = x;
+        this.y = y;
+    }
+
+    public Point2D(Scanner scanner) {
+        this.label = scanner.next();
+        this.x = scanner.nextDouble();
+        this.y = scanner.nextDouble();
+    }
+
+    public Point2D(String label, Scanner scanner) {
+        this.label = label;
+        this.x = scanner.nextDouble();
+        this.y = scanner.nextDouble();
+    }
+
+    // Instance methods
+    public double distance(Point2D other) {
+        double deltaX = this.x - other.x;
+        double deltaY = this.y - other.y;
+        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    @Override
+    public String toString() {
+        return label + "(" + x + "," + y + ")";
+    }
+}
+
+
+
+
+- LAB 2 -
+class Path3 {
+    private String label;
+    private Point2D startPoint;
+    private Point2D interiorPoint;
+    private Point2D endPoint;
+
+    // Constructors
+    public Path3(String label, Point2D startPoint, Point2D interiorPoint, Point2D endPoint) {
+        this.label = label;
+        this.startPoint = startPoint;
+        this.interiorPoint = interiorPoint;
+        this.endPoint = endPoint;
+    }
+
+    public Path3(Scanner scanner) {
+        this.label = scanner.next();
+        this.startPoint = new Point2D(scanner);
+        this.interiorPoint = new Point2D(scanner);
+        this.endPoint = new Point2D(scanner);
+    }
+
+    // Instance methods
+    public double length() {
+        return startPoint.distance(interiorPoint) + interiorPoint.distance(endPoint);
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    @Override
+    public String toString() {
+        return startPoint.getLabel() + "-" + interiorPoint.getLabel() + "-" + endPoint.getLabel();
+    }
+}
+
+public class BestRoute {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Read in the coordinates of four points
+        Point2D point1 = new Point2D("A", scanner);
+        Point2D point2 = new Point2D("B", scanner);
+        Point2D point3 = new Point2D("C", scanner);
+        Point2D point4 = new Point2D("D", scanner);
+
+        // Create paths
+        Path3 path1 = new Path3("Path1", point1, point2, point3);
+        Path3 path2 = new Path3("Path2", point2, point3, point4);
+
+        // Print paths and lengths
+        System.out.println("Path1: " + path1);
+        System.out.println("Path1 Length: " + path1.length());
+
+        System.out.println("Path2: " + path2);
+        System.out.println("Path2 Length: " + path2.length());
+
+        scanner.close();
+    }
+}
+
+
+
+- LAB 3 -
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
+class Money {
+    private int cents;
+
+    // Constructors
+    public Money() {
+        this.cents = 0;
+    }
+
+    public Money(Scanner scanner) {
+        String moneyString = scanner.next();
+        this.cents = parseMoneyString(moneyString);
+    }
+
+    // Helper method to parse money string and convert to cents
+    private int parseMoneyString(String moneyString) {
+        double dollars = Double.parseDouble(moneyString.substring(1));
+        return (int) (dollars * 100);
+    }
+
+    // Method to add Money objects
+    public void add(Money other) {
+        this.cents += other.cents;
+    }
+
+    // Method to convert cents to money string
+    @Override
+    public String toString() {
+        double dollars = cents / 100.0;
+        return String.format("$%.2f", dollars);
+    }
+
+    // Method to check equality with another Money object
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Money other = (Money) obj;
+        return this.cents == other.cents;
+    }
+}
+
+public class CashRegister {
+    public static void main(String[] args) {
+        // Read starting balance from the balance file
+        try (Scanner balanceScanner = new Scanner(new File("balance"))) {
+            Money balance = new Money(balanceScanner);
+            System.out.println("Starting Balance: " + balance);
+            
+            // Read transactions from the transactions file
+            try (Scanner transactionsScanner = new Scanner(new File("transactions"))) {
+                int transactionCount = 0;
+                Money totalTransactions = new Money();
+
+                // Process transactions
+                while (transactionsScanner.hasNext()) {
+                    Money transaction = new Money(transactionsScanner);
+                    balance.add(transaction);
+                    totalTransactions.add(transaction);
+                    transactionCount++;
+                }
+
+                // Update the balance file with the new balance
+                try (PrintWriter balanceWriter = new PrintWriter("balance")) {
+                    balanceWriter.println(balance);
+                } catch (FileNotFoundException e) {
+                    System.err.println("Error writing to balance file.");
+                }
+
+                // Print results
+                System.out.println("Number of transactions: " + transactionCount);
+                System.out.println("Total value of transactions: " + totalTransactions);
+                System.out.println("Closing Balance: " + balance);
+            } catch (FileNotFoundException e) {
+                System.err.println("Transactions file not found.");
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Balance file not found.");
+        }
+    }
+}
+
+
+
+- LAB 4 - 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+class Dictionary {
+    private String fileName;
+
+    // Constructor
+    public Dictionary(String fileName) {
+        this.fileName = fileName;
+    }
+
+    // Method to check if a word is found in the dictionary file
+    public boolean found(String word) {
+        try (Scanner fileScanner = new Scanner(new File(fileName))) {
+            while (fileScanner.hasNext()) {
+                String dictionaryWord = fileScanner.next().toLowerCase();
+                if (dictionaryWord.equals(word.toLowerCase())) {
+                    return true;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: Dictionary file not found.");
+        }
+        return false;
+    }
+}
+
+public class SpellCheck1 {
+    public static void main(String[] args) {
+        Dictionary dictionary = new Dictionary("Dictionary");
+
+        try (Scanner paperScanner = new Scanner(new File("paper"))) {
+            int lineNumber = 1;
+
+            while (paperScanner.hasNextLine()) {
+                String line = paperScanner.nextLine();
+                Scanner lineScanner = new Scanner(line);
+
+                int wordPosition = 1;
+
+                while (lineScanner.hasNext()) {
+                    String word = lineScanner.next();
+
+                    // Remove punctuation
+                    word = word.replaceAll("[^a-zA-Z]", "");
+
+                    if (!dictionary.found(word)) {
+                        // Display the misspelled word
+                        System.out.printf("Line %4d: %s%n", lineNumber, word);
+                    }
+
+                    wordPosition++;
+                }
+
+                lineNumber++;
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: Paper file not found.");
+        }
+    }
+}
+
+
+- LAB 5 - 
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+class Dictionary {
+    private String[] words;
+
+    // Constructor
+    public Dictionary(String fileName) {
+        try (Scanner fileScanner = new Scanner(new File(fileName))) {
+            // Count the number of words in the file
+            int wordCount = 0;
+            while (fileScanner.hasNext()) {
+                fileScanner.next();
+                wordCount++;
+            }
+
+            // Initialize the array
+            words = new String[wordCount];
+
+            // Read words and populate the array
+            fileScanner.close();
+            fileScanner.reset();
+            fileScanner = new Scanner(new File(fileName));
+            for (int i = 0; i < wordCount; i++) {
+                words[i] = fileScanner.next().toLowerCase();
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: Dictionary file not found.");
+        }
+    }
+
+    // Method to check if a word is found in the dictionary
+    public boolean found(String word) {
+        for (String dictionaryWord : words) {
+            if (dictionaryWord.equals(word.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+public class SpellCheck3 {
+    public static void main(String[] args) {
+        Dictionary dictionary = new Dictionary("Dictionary");
+
+        try (Scanner paperScanner = new Scanner(new File("paper"))) {
+            int lineNumber = 1;
+
+            while (paperScanner.hasNextLine()) {
+                String line = paperScanner.nextLine();
+                Scanner lineScanner = new Scanner(line);
+
+                int wordPosition = 1;
+
+                while (lineScanner.hasNext()) {
+                    String word = lineScanner.next();
+
+                    // Remove punctuation
+                    word = word.replaceAll("[^a-zA-Z]", "");
+
+                    if (!dictionary.found(word)) {
+                        // Display the misspelled word
+                        System.out.printf("Line %4d: %s%n", lineNumber, word);
+                    }
+
+                    wordPosition++;
+                }
+
+                lineNumber++;
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: Paper file not found.");
+        }
+    }
+}
+
+
+
+
