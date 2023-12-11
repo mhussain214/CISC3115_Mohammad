@@ -1,0 +1,23 @@
+public class RectMovLeft {
+
+    public static void main(String[] args) {
+        // Create a Point and Rectangle
+        Point p = new Point(3, 4);
+        Rectangle box = new Rectangle(0, 0, 100, 200);
+
+        // Call rectmovleft and print new box attributes
+        rectmovleft(box, p);
+        System.out.println("New Box Attributes: " + box);
+    }
+
+    public static void rectmovleft(Rectangle box, Point p) {
+        // Check if the input Point attributes are legal
+        if (p.x < 0) {
+            throw new IllegalArgumentException("Usage: input x is not legal");
+        }
+
+        // Move the rectangle to the left
+        box.x = box.x + p.x;
+        box.y = box.y + p.y;
+    }
+}
