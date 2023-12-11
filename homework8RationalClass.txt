@@ -1,0 +1,26 @@
+public class RationalExample {
+    public static void main(String[] args) {
+        // Create rational numbers
+        Rational rational1 = new Rational(1, 2);
+        Rational rational2 = new Rational(3, 4);
+
+        // Display the rational numbers
+        System.out.println("Rational 1: " + rational1);
+        System.out.println("Rational 2: " + rational2);
+
+        // Perform operations
+        Rational sum = rational1.add(rational2);
+        Rational difference = rational1.subtract(rational2);
+        Rational product = rational1.multiply(rational2);
+        Rational quotient = rational1.divide(rational2);
+
+        // Display the results
+        System.out.println("Sum: " + sum);
+        System.out.println("Difference: " + difference);
+        System.out.println("Product: " + product);
+        System.out.println("Quotient: " + quotient);
+
+        // Comparison
+        System.out.println("Comparison result: " + rational1.compareTo(rational2));
+    }
+}
